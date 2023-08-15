@@ -9,14 +9,38 @@
 # print(my_screen.canvheight)
 # my_screen.exitonclick()
 
-from prettytable import PrettyTable
+# from prettytable import PrettyTable
+#
+# table = PrettyTable()
+#
+# table.add_column("Pokemon Name",["Pikachu","Squirtle","Charmander"])
+# table.add_column("Type", ["Electric","Water","Fire"])
+#
+# table.align["Pokemon Name"] = "l"
+# table.align["Type"] = "r"
+#
+# print(table)
 
-table = PrettyTable()
+from menu import Menu
+from coffee_maker import CoffeeMaker
+from money_machine import MoneyMachine
 
-table.add_column("Pokemon Name",["Pikachu","Squirtle","Charmander"])
-table.add_column("Type", ["Electric","Water","Fire"])
+money_machine = MoneyMachine()
+coffee_maker = CoffeeMaker()
+menu = Menu()
 
-table.align["Pokemon Name"] = "l"
-table.align["Type"] = "r"
+is_on = True
 
-print(table)
+while is_on:
+    options = menu.get_items()
+    choice = input(f"What would you like? ({options}): ")
+    if choice == "off":
+        is_on = False
+    elif choice == "report":
+        coffee_maker.report()
+        money_machine.report()
+    else:
+        drink = menu.find_drink(choice)
+
+        if coffee_maker.is_resource_sufficient(drink) and money_machine.make_payment(drink.cost):
+            coffee_maker.make_coffee(drink)
